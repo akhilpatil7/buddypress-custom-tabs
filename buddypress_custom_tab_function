@@ -1,0 +1,66 @@
+function add_menu_tabs() {
+	global $bp;
+	
+	bp_core_new_nav_item( array(
+		'name'                  => 'Main Menu Tab', /*this name will appear on the main profile tab */
+		'slug'                  => 'mainmenu',
+		'parent_url'            => $bp->displayed_user->domain,
+		'parent_slug'           => $bp->profile->slug,
+		'screen_function'       => 'mainmenu_screen',			
+		'position'              => 200,  /* this will decide the position of the tab to be 1st or last */
+		'default_subnav_slug'   => 'mainmenu'
+	) );
+		
+	bp_core_new_subnav_item( array(
+		'name'              => 'Submenu1',
+		'slug'              => 'submenu1',
+		'parent_url'        => trailingslashit( bp_displayed_user_domain() . 'mainmenu' ),
+		'parent_slug'       => 'mainmenu',
+		'screen_function'   => 'submenu1_screen',
+		'position'          => 100,
+		'user_has_access'   => bp_is_my_profile()
+	) );		
+
+	bp_core_new_subnav_item( array(
+		'name'              => 'Submenu2',
+		'slug'              => 'submenu2',
+		'parent_url'        => trailingslashit( bp_displayed_user_domain() . 'mainmenu' ),
+		'parent_slug'       => 'mainmenu',
+		'screen_function'   => 'submenu2_screen',
+		'position'          => 150,
+		'user_has_access'   => bp_is_my_profile()
+	) );	
+
+}
+add_action( 'bp_setup_nav', 'add_menu_tabs', 100 );
+
+
+
+function mainmenu_screen() {
+    add_action( 'bp_template_title', 'mainmenu_screen_title' );
+    add_action( 'bp_template_content', 'mainmenu_screen_content' );
+    bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'members/single/plugins' ) );
+}
+function mainmenu_screen_title() { 
+	echo 'Main Menu Title<br/>';
+}
+function mainmenu_screen_content() { 
+	echo 'Main Menu content Content<br/>';
+}
+
+
+function submenu1_screen() {
+    add_action( 'bp_template_content', 'submenu1_screen_content' );
+    bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'members/single/plugins' ) );
+}
+function submenu1_screen_content() { 
+	echo 'Sub Menu 1'; 
+}
+
+function submenu2_screen() {
+    add_action( 'bp_template_content', 'submenu2_screen_content' );
+    bp_core_load_template( apply_filters( 'bp_core_template_plugin', 'members/single/plugins' ) );
+}
+function submenu2_screen_content() { 
+	echo 'Sub Menu 2'; 
+}
